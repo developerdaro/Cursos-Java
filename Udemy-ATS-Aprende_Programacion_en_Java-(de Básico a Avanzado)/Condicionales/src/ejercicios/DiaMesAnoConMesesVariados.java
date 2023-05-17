@@ -10,7 +10,7 @@ public class DiaMesAnoConMesesVariados {
         ANUNCIADO
         
         Pedir el dia, mes y año de una fecha e indicar si la fecha es correcta.
-        Con meses de 28, 39 y 31 dias. Sin años bisiestos.
+        Con meses de 28, 29 y 31 dias. Sin años bisiestos.
          */
         
         
