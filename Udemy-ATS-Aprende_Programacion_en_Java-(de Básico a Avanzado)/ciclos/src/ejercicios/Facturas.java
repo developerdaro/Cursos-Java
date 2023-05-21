@@ -22,6 +22,7 @@ public class Facturas {
 
         //Pedir informacion
         Scanner entrada = new Scanner(System.in);
+        
 
         //Operaciones
         //Factura
@@ -40,7 +41,7 @@ public class Facturas {
                     contador+=1;
                 }
             }
-            System.out.println("---------------------------------------------------------------");
+            
 
             if (i == 2) {
                 System.out.println("Factura " + i);
@@ -54,7 +55,6 @@ public class Facturas {
                     contador+=1;
                 }
             }
-            System.out.println("---------------------------------------------------------------");
             if (i == 3) {
                 System.out.println("Factura " + i);
                 codigo = "Daro-03";
@@ -67,7 +67,6 @@ public class Facturas {
                     contador+=1;
                 }
             }
-            System.out.println("---------------------------------------------------------------");
             if (i == 4) {
                 System.out.println("Factura " + i);
                 codigo = "Daro-04";
@@ -80,7 +79,6 @@ public class Facturas {
                     contador+=1;
                 }
             }
-            System.out.println("---------------------------------------------------------------");
             if (i == 5) {
                 System.out.println("Factura " + i);
                 codigo = "Daro-05";
@@ -93,7 +91,6 @@ public class Facturas {
                     contador+=1;
                 }
             }
-            System.out.println("---------------------------------------------------------------");
 
         }
         System.out.println("La cantidad de facturas por encima de 600 es: "+contador);
