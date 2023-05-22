@@ -18,8 +18,8 @@ public class MezclarTablas {
         Scanner entrada = new Scanner(System.in);
 
         //Arrays
-        int a[] = new int[12];
-        int b[] = new int[12];
+        int a[] = new int[10];
+        int b[] = new int[10];
 
         //Longitud de tabla C
         int longitudTablaC = a.length + b.length;
@@ -36,32 +36,41 @@ public class MezclarTablas {
             b[i] = entrada.nextInt();
         }
 
-        int temporal = 2;
-        int segundoFor=0;
-        int contadorInterno=2;
+        int mitad = c.length / 2;
+        int foruno = 0;
+        int saltarin=2;
+        int fordos=0;
         for (int i = 0; a.length > i; i++) {
-            c[i] = a[i];
-            System.out.println("Valor FOR 1 - " + c[i]);
 
-            if (i == temporal) {
-                temporal = a.length;
-                for (int j = 0; j < temporal; j++) {
-                    c[i + segundoFor] = b[segundoFor];
-                    System.out.println("Valor FOR 2 - " + c[i + segundoFor]);
+            c[i] = a[foruno];
+            
+            if (i == saltarin) {
 
-                    if (j == contadorInterno) {
-                        temporal=5;
+                for (int j = 0; b.length > j; j++) {
+                    i++;
+                    c[i] = b[j];
+                    
+                    if (i == saltarin*2+1) {
+                        
+                        saltarin=saltarin*4;
                         break;
                     }
-                    segundoFor++;
 
                 }
             }
+            foruno++;
+         
 
+        }
+
+        //Organizar
+        for (int i = 0; i < c.length; i++) {
+            System.out.println(c[i]);
         }
 
         //Mostrar tabla C
         for (int elementoC : c) {
+
             //System.out.println(elementoC);
         }
 
