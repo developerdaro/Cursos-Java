@@ -20,10 +20,11 @@ public class Persona extends javax.swing.JFrame {
 
     public static final String URL = "jdbc:mysql://localhost:3306/super_mercado?autoReconnect=true&useSSL=false";
     public static final String usuario = "root";
-    public static final String contrasena = "daro.";
-    
+    public static final String contrasena = "admin";
+
     PreparedStatement ps;
     ResultSet rs;
+
     public Connection getConnection() {
 
         Connection conexion = null;
@@ -39,8 +40,8 @@ public class Persona extends javax.swing.JFrame {
 
         return conexion;
     }
-    
-    public void limpiarCajas(){
+
+    public void limpiarCajas() {
         txtBuscar.setText("");
         txtClave.setText("");
         txtNombre.setText("");
@@ -49,8 +50,7 @@ public class Persona extends javax.swing.JFrame {
         txtCorreo.setText("");
         txtFecha.setText("");
         cmbxGenero.setSelectedIndex(0);
-        
-        
+
     }
 
     public Persona() {
@@ -130,9 +130,19 @@ public class Persona extends javax.swing.JFrame {
 
         btnModificar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnLimpiar.setText("Limpiar");
@@ -272,87 +282,138 @@ public class Persona extends javax.swing.JFrame {
 
     private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarActionPerformed
 
-     
-
 
     }//GEN-LAST:event_btnConectarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
 
-        
-        Connection conexion=null;
-        
+        Connection conexion = null;
+
         try {
-            conexion=getConnection();
-            ps=conexion.prepareStatement("insert into persona (clave,nombre,domicilio,celular,correo_electronico,fecha_nacimiento,genero) values (?,?,?,?,?,?,?)");
-            ps.setString(1,txtClave.getText());
+            conexion = getConnection();
+            ps = conexion.prepareStatement("insert into persona (clave,nombre,domicilio,celular,correo_electronico,fecha_nacimiento,genero) values (?,?,?,?,?,?,?)");
+            ps.setString(1, txtClave.getText());
             ps.setString(2, txtNombre.getText());
             ps.setString(3, txtDomicilio.getText());
             ps.setString(4, txtCelular.getText());
             ps.setString(5, txtCorreo.getText());
             ps.setDate(6, Date.valueOf(txtFecha.getText()));
             ps.setString(7, cmbxGenero.getSelectedItem().toString());
-            
-            
-            int resultado=ps.executeUpdate(); //Ejecutamos la insercion en la bd
-            if(resultado>0){
+
+            int resultado = ps.executeUpdate(); //Ejecutamos la insercion en la bd
+            if (resultado > 0) {
                 JOptionPane.showMessageDialog(null, "registro insertado correctamente");
                 this.limpiarCajas();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "No se pudo insertar el registro, contacta a daromitas");
                 this.limpiarCajas();
             }
             conexion.close();
         } catch (Exception e) {
-            System.out.println("Error: "+e);
+            System.out.println("Error: " + e);
         }
-        
-        
-        
+
 
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-this.limpiarCajas();
+        this.limpiarCajas();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
-        
         //Buscar
-        Connection conexion=null;
+        Connection conexion = null;
         try {
-            
-            conexion=getConnection();
-            ps=conexion.prepareStatement("select * from personas where clave=?");
+
+            conexion = getConnection();
+            ps = conexion.prepareStatement("select * from persona where clave=?");
             ps.setString(1, txtBuscar.getText());
-            
-            rs=ps.executeQuery();
-            
-            if(rs.next()){
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                txtId.setText((String.valueOf(rs.getInt("idPersona"))));
                 txtClave.setText(rs.getString("clave"));
                 txtNombre.setText(rs.getString("nombre"));
-                txtDomicilio.setText(rs.getString("clave"));
-                txtCelular.setText(rs.getString(""));
-                txtCorreo.setText(rs.getString(""));
-                txtFecha.setText(rs.getString(""));
-                cmbxGenero.setText(rs.getString(""));
-                
-                
-                
+                txtDomicilio.setText(rs.getString("domicilio"));
+                txtCelular.setText(rs.getString("celular"));
+                txtCorreo.setText(rs.getString("correo_electronico"));
+                txtFecha.setText(rs.getString("fecha_nacimiento"));
+                cmbxGenero.setSelectedItem(rs.getString("genero"));
+
+            }else{
+                JOptionPane.showMessageDialog(null, "Persona no encontrada");
             }
-            
-       
-            
+            conexion.close();
+
         } catch (Exception e) {
             System.out.println("e = " + e);
         }
-        
-        
+
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+        //Modificar
+        
+          Connection conexion = null;
+
+        try {
+            conexion = getConnection();
+            ps = conexion.prepareStatement("update persona set clave=?, nombre=?,domicilio=?,celular=?,correo_electronico=?,fecha_nacimiento=?,genero=? where idPersona=?");
+            ps.setString(1, txtClave.getText());
+            ps.setString(2, txtNombre.getText());
+            ps.setString(3, txtDomicilio.getText());
+            ps.setString(4, txtCelular.getText());
+            ps.setString(5, txtCorreo.getText());
+            ps.setDate(6, Date.valueOf(txtFecha.getText()));
+            ps.setString(7, cmbxGenero.getSelectedItem().toString());
+            ps.setInt(8,Integer.parseInt(txtId.getText()));
+
+            int resultado = ps.executeUpdate(); //Ejecutamos la modificacion en la bd
+            if (resultado > 0) {
+                JOptionPane.showMessageDialog(null, "registro actualizado correctamente");
+                this.limpiarCajas();
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo actualizar el registro, contacta a daromitas");
+                this.limpiarCajas();
+            }
+            conexion.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+
+        //Eliminar
+        
+          Connection conexion = null;
+
+        try {
+            conexion = getConnection();
+            ps = conexion.prepareStatement("delete from persona where idPersona=?");
+        
+            ps.setInt(1,Integer.parseInt(txtId.getText()));
+
+       
+            int resultado = ps.executeUpdate(); //Ejecutamos la eliminacion en la bd
+            if (resultado > 0) {
+                JOptionPane.showMessageDialog(null, "registro eliminado correctamente");
+                this.limpiarCajas();
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo eliminadar el registro, contacta a daromitas");
+                this.limpiarCajas();
+            }
+            conexion.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
